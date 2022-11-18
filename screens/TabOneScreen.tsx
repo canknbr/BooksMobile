@@ -1,7 +1,13 @@
-import { ActivityIndicator, FlatList, StyleSheet } from 'react-native';
+import {
+  ActivityIndicator,
+  FlatList,
+  StyleSheet,
+  TextInput,
+  Button,
+} from 'react-native';
 import { Text, View } from '../components/Themed';
-
-import { useQuery, gql } from '@apollo/client';
+import React, { useState } from 'react';
+import { useQuery, gql, useLazyQuery } from '@apollo/client';
 import BookItem from '../components/BookItem';
 const query = gql`
   query SearchBooks($q: String) {
@@ -36,11 +42,22 @@ const query = gql`
 `;
 
 export default function TabOneScreen() {
-  const { data, loading, error } = useQuery(query, {
-    variables: { q: 'React Native' },
-  });
+  const [search, setSearch] = useState('');
+  const [runQuery, { data, loading, error }] = useLazyQuery(query);
   return (
     <View style={styles.container}>
+      <View style={styles.header}>
+        <TextInput
+          style={styles.input}
+          placeholder="Search..."
+          value={search}
+          onChangeText={setSearch}
+        />
+        <Button
+          title="Search"
+          onPress={() => runQuery({ variables: { q: search } })}
+        />
+      </View>
       {loading && <ActivityIndicator />}
       {error && (
         <View style={styles.container}>
@@ -56,6 +73,7 @@ export default function TabOneScreen() {
               title: item.volumeInfo.title,
               image: item.volumeInfo.imageLinks.thumbnail,
               authors: item.volumeInfo.authors,
+              isbn: item.volumeInfo.industryIdentifiers?.[0]?.identifier,
             }}
           />
         )}
@@ -78,5 +96,17 @@ const styles = StyleSheet.create({
     marginVertical: 30,
     height: 1,
     width: '80%',
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  input: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: 'gainsboro',
+    borderRadius: 5,
+    padding: 10,
+    marginVertical: 5,
   },
 });
