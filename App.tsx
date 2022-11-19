@@ -4,6 +4,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import useCachedResources from './hooks/useCachedResources';
 import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
+import { MyBooksProvider } from './context/MyBooksProvider';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 const API_KEY =
   'itaperucu::stepzen.net+1000::d4e42159c8880dd79fcdb6fb18b622b8efcd8f6dc01cf3614a817ea97c280fd3';
@@ -23,7 +24,9 @@ export default function App() {
   } else {
     return (
       <ApolloProvider client={client}>
-        <Navigation colorScheme={colorScheme} />
+        <MyBooksProvider>
+          <Navigation colorScheme={colorScheme} />
+        </MyBooksProvider>
         <StatusBar />
       </ApolloProvider>
     );

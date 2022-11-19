@@ -1,12 +1,18 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, FlatList } from 'react-native';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
-
+import React, { useState, useContext } from 'react';
+import { useMyBooks } from '../context/MyBooksProvider';
+import BookItem from '../components/BookItem';
 export default function TabTwoScreen() {
+  const { savedBooks } = useMyBooks();
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tab Two</Text>
+      <FlatList
+        data={savedBooks}
+        renderItem={({ item }) => <BookItem book={item} />}
+      />
     </View>
   );
 }
@@ -14,8 +20,7 @@ export default function TabTwoScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    padding: 10,
   },
   title: {
     fontSize: 20,
