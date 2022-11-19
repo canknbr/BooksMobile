@@ -5,7 +5,7 @@ import { Text, View } from '../components/Themed';
 import React, { useState, useContext } from 'react';
 import { useMyBooks } from '../context/MyBooksProvider';
 import BookItem from '../components/BookItem';
-export default function TabTwoScreen() {
+export default function MyBooksScreen() {
   const { savedBooks } = useMyBooks();
   return (
     <View style={styles.container}>
